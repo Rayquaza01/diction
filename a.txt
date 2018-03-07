@@ -1,0 +1,71 @@
+{
+    "ahd-legacy": {
+        "attribution": "from The American Heritage\u00ae Dictionary of the English Language, 4th Edition",
+        "list": [
+            [
+                "verb-transitive",
+                "To address an earnest or urgent request to; implore:  beseech them for help. "
+            ],
+            [
+                "verb-transitive",
+                "To request earnestly; beg for:  beseech help.  See Synonyms at beg."
+            ]
+        ]
+    },
+    "wiktionary": {
+        "attribution": "from Wiktionary, Creative Commons Attribution/Share-Alike License",
+        "list": [
+            [
+                "verb",
+                "To beg or implore."
+            ],
+            [
+                "noun",
+                "A request."
+            ]
+        ]
+    },
+    "gcide": {
+        "attribution": "from the GNU version of the Collaborative International Dictionary of English",
+        "list": [
+            [
+                "noun",
+                "Solicitation; supplication."
+            ],
+            [
+                "verb-transitive",
+                "To ask or entreat with urgency; to supplicate; to implore."
+            ]
+        ]
+    },
+    "century": {
+        "attribution": "from The Century Dictionary and Cyclopedia",
+        "list": [
+            [
+                "",
+                "To entreat; supplicate; implore; ask or pray with urgency: followed by a personal object."
+            ],
+            [
+                "",
+                "To beg eagerly for; solicit: followed by the thing solicited."
+            ],
+            [
+                "",
+                "<strong>Synonyms</strong> Ask, Request, Beg, etc. (see ask), plead for or with, petition, conjure, appeal to."
+            ],
+            [
+                "noun",
+                "A request: as, \u201csuch submiss beseeches,\u201d"
+            ]
+        ]
+    },
+    "wordnet": {
+        "attribution": "from WordNet 3.0 Copyright 2006 by Princeton University. All rights reserved.",
+        "list": [
+            [
+                "verb",
+                "ask for or request earnestly"
+            ]
+        ]
+    }
+}
