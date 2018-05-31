@@ -5,7 +5,7 @@ import urllib.request
 import json
 import os
 import collections
-import webbrowser
+import sys
 
 
 def loadConfig(file):
@@ -17,13 +17,13 @@ def loadConfig(file):
 
 def parseArgs():
     relatedTypes = ["synonym", "antonym", "variant", "equivalent", "cross-reference", "related-word", "rhyme", "form", "etymologically-related-term", "hypernym", "hyponym", "inflected-form", "primary", "same-context", "verb-form", "verb-stem"]
+    partsOfSpeech = ["noun", "adjective", "verb", "adverb", "interjection", "pronoun", "preposition", "abbreviation", "affix", "article", "auxiliary-verb", "conjunction", "definite-article", "family-name", "given-name", "idiom", "imperative", "noun-plural", "noun-posessive", "past-participle", "phrasal-prefix", "proper-noun", "proper-noun-plural", "proper-noun-posessive", "suffix", "verb-intransitive", "verb-transitive"]
     ap = argparse.ArgumentParser()
-    ap.add_argument("word", nargs=1)
+    ap.add_argument("word", nargs="?")
     ap.add_argument("-c", "--useCannonical", action="store_true")
     ap.add_argument("-l", "--limit", type=int, nargs="?")
-    ap.add_argument("-o", "--options", nargs="?")
     ap.add_argument("-e", "--examples", action="store_true")
-    ap.add_argument("-d", "--definitions", action="store_true")
+    ap.add_argument("-d", "--definitions", choices=partsOfSpeech, nargs="*")
     ap.add_argument("-r", "--relatedWords", choices=relatedTypes, nargs="*")
     ap.add_argument("-p", "--pronunciations", action="store_true")
     ap.add_argument("-hy", "--hyphenation", action="store_true")
@@ -55,6 +55,9 @@ def makeRequest(word, section, options, params):
     if section == "relatedWords":
         if params["relatedWords"]:
             getParams["relationshipTypes"] = ",".join(params["relatedWords"])
+    if section == "definitions":
+        if params["definitions"]:
+            getParams["partOfSpeech"] = ",".join(params["definitions"])
     getParams["api_key"] = options["api"]["apikey"]
     getList = []
     for k, v in getParams.items():
@@ -77,10 +80,14 @@ def wordwrap(line, length):
 
 
 def displayInfo(section, response, length):
-    #if section == "examples":
-    #    #
+    if section == "examples":
+        print("=== Examples ===\n")
+        for example in response["examples"]:
+            wordwrap(example["title"] + ":", length)
+            wordwrap(example["text"], length)
+            print(" | ")
+            wordwrap(example["url"] + "\n", length)
     if section == "definitions":
-        a = 0
         print("=== Definitions ===\n")
         definitions = {}
         for define in response:
@@ -89,7 +96,6 @@ def displayInfo(section, response, length):
                 definitions[sd] = {}
                 definitions[sd]["attribution"] = define["attributionText"]
                 definitions[sd]["list"] = []
-            a+=1
             definitions[sd]["list"].append([define["partOfSpeech"] if "partOfSpeech" in define else "", define["text"] if "text" in define else define["extendedText"]])
         for dictionary in definitions:
             for entry in definitions[dictionary]["list"]:
@@ -129,14 +135,15 @@ def displayInfo(section, response, length):
 
 
 def main():
-    os.chdir(os.path.dirname(__file__))
+    cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
     arguments = parseArgs()
     filteredArgs = {k: v for k, v in arguments.items() if v is not None and v is not False}
-    options = loadConfig(arguments["options"] if "options" in filteredArgs else "diction.ini")
+    options = loadConfig(cwd + "/diction.ini")
     getParams = list((collections.Counter(filteredArgs.keys()) & collections.Counter(options.sections())).elements())
-    length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else 100
+    length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
+    word = arguments["word"] if arguments["word"] is not None else ""
     for section in getParams:
-        response = makeRequest(arguments["word"][0], section, options, arguments)
+        response = makeRequest(word, section, options, arguments)
         displayInfo(section, response, length)
 
 
