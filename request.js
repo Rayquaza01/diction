@@ -1,6 +1,22 @@
-// const wordEle = document.getElementById("word");
-// const sectionEle = document.getElementById("section");
-// const box = document.getElementById("box");
+const wordEle = document.getElementById("word");
+const sectionEle = document.getElementById("section");
+const box = document.getElementById("box");
+
+function displayInfo(section, response) {
+    switch (section) {
+    case "audio":
+        for (var audio of response) {
+            var quote = document.createElement("blockquote");
+            var media = document.createElement("audio");
+            media.src = audio.fileUrl;
+            quote.append(media);
+            var attribute = document.createElement("span");
+            attribute.innerText = response.attributionText;
+            quote.append(attribute);
+            box.append(quote);
+        }
+    }
+}
 
 async function request(word, section, getString) {
     var base = "https://api.wordnik.com/v4/";
@@ -9,26 +25,26 @@ async function request(word, section, getString) {
     var response = await fetch(url);
     var responseText = await response.text();
     var responseJSON = JSON.parse(responseText);
-    console.log(responseJSON)
+    displayInfo(responseJSON)
 }
 
 function main() {
     var getList = [];
-    var temp = {}
+    var temp = {};
     for (var pair of location.search.substring(1).split("&")) {
         var split = pair.split("=");
         if (split[0] === "word") {
-            // wordEle.innerText = split[1];
+            wordEle.innerText = split[1];
             temp["word"] = split[1];
-        } else if (split[0] == "section") {
-            // sectionEle.innerText = split[1];
+        } else if (split[0] === "section") {
+            sectionEle.innerText = split[1];
             temp["section"] = split[1];
         } else {
             getList.push(pair);
         }
     }
     var getString = getList.join("&");
-    request(temp["word"], temp["section"], getString)
+    request(temp["word"], temp["section"], getString);
 }
 
 document.addEventListener("DOMContentLoaded", main);
