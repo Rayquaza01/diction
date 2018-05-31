@@ -1,5 +1,5 @@
-const wordEle = document.getElementById("word");
-const sectionEle = document.getElementById("section");
+const wordEle = document.getElementById("wordEle");
+const sectionEle = document.getElementById("sectionEle");
 const box = document.getElementById("box");
 
 function displayInfo(section, response) {
