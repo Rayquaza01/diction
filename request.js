@@ -25,7 +25,7 @@ async function request(word, section, getString) {
     var response = await fetch(url);
     var responseText = await response.text();
     var responseJSON = JSON.parse(responseText);
-    displayInfo(responseJSON)
+    displayInfo(section, responseJSON);
 }
 
 function main() {
