@@ -8,6 +8,7 @@ import collections
 import sys
 import webbrowser
 import re
+import codecs
 
 
 def loadConfig(file):
@@ -67,7 +68,7 @@ def makeRequest(word, section, options, arguments):
     base = "https://api.wordnik.com/v4/"
     endpoint = "word.json"
     if section == "reverseDictionary":
-        arguments["query"] = word 
+        arguments["query"] = word
     word += "/"
     if section in ["reverseDictionary", "randomWord", "randomWords"]:
         endpoint = "words.json"
@@ -79,6 +80,7 @@ def makeRequest(word, section, options, arguments):
 
 def wordwrap(line, length):
     line = re.sub("<[^>]*>", "", line)
+    line = line.replace("\n", "")
     if len(line) < length:
         print(" | " + line)
     else:
@@ -104,7 +106,7 @@ def displayInfo(section, response, length):
         wordwrap(response["title"] + ":", length)
         wordwrap(response["text"], length)
         print(" | ")
-        wordwrap(response["url"] + "\n", length)
+        wordwrap(response["url"], length)
         print("")
     if section == "definitions":
         print("=== Definitions ===\n")
@@ -133,6 +135,7 @@ def displayInfo(section, response, length):
         print("=== Pronunciations ===\n")
         for phonic in response:
             wordwrap(phonic["rawType"] + ": " + phonic["raw"], length)
+            print("")
     if section == "hyphenation":
         print("=== Hyphenation ===\n")
         final = []
@@ -146,7 +149,7 @@ def displayInfo(section, response, length):
             wordwrap(phrase["gram1"] + " " + phrase["gram2"], length)
             print("")
     if section == "etymologies":
-	print("=== Etymologies ===\n")
+        print("=== Etymologies ===\n")
         for ety in response:
             wordwrap(ety, length)
             print("")
@@ -168,14 +171,16 @@ def displayInfo(section, response, length):
 
 
 def main():
+    sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
     cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
     arguments = parseArgs()
     filteredArgs = {k: v for k, v in arguments.items() if v is not None and v is not False}
     options = loadConfig(cwd + "/diction.ini")
     getParams = list((collections.Counter(filteredArgs.keys()) & collections.Counter(options.sections())).elements())
     length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
-    words = arguments["word"] if arguments["word"] is not None else ""
-    for word in words.split(" "):
+    words = arguments["word"] if arguments["word"] is not None else [""]
+    for word in words:
+        print("=== " + word + " ===")
         for section in getParams:
             if section not in ["audio", "frequency"]:
                 response = makeRequest(word, section, options, arguments)
