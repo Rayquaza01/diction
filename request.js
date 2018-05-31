@@ -14,20 +14,21 @@ async function request(word, section, getString) {
 
 function main() {
     var getList = [];
+    var temp = {}
     for (var pair of location.search.substring(1).split("&")) {
         var split = pair.split("=");
         if (split[0] === "word") {
             // wordEle.innerText = split[1];
-            var word = split[1];
+            var temp["word"] = split[1];
         } else if (split[0] == "section") {
             // sectionEle.innerText = split[1];
-            var section = split[1];
+            var temp["section"] = split[1];
         } else {
             getList.push(pair);
         }
     }
     var getString = getList.join("&");
-    request()
+    request(temp["word"], temp["section"], getString)
 }
 
 document.addEventListener("DOMContentLoaded", main);
