@@ -86,9 +86,9 @@ def wordwrap(line, length):
     else:
         while len(line) > length:
             line = " | " + line
-            space = line[0:length].rfind(" ")
+            space = re.search("(?s:.*)[ ?&/+#=]", line[0:length]).span()[1]
             print(line[0:space])
-            line = line[space+1:]
+            line = line[space:]
         print(" | " + line)
 
 
@@ -96,14 +96,16 @@ def displayInfo(section, response, length):
     if section == "examples":
         print("=== Examples ===\n")
         for example in response["examples"]:
-            wordwrap(example["title"] + ":", length)
+            if "title" in example:
+                wordwrap(example["title"] + ":", length)
             wordwrap(example["text"], length)
             print(" | ")
             wordwrap(example["url"], length)
             print("")
     if section == "topExample":
         print("=== Top Example ===\n")
-        wordwrap(response["title"] + ":", length)
+        if "title" in response:
+            wordwrap(response["title"] + ":", length)
         wordwrap(response["text"], length)
         print(" | ")
         wordwrap(response["url"], length)
