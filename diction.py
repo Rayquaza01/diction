@@ -146,8 +146,10 @@ def displayInfo(section, response, length):
             wordwrap(phrase["gram1"] + " " + phrase["gram2"], length)
             print("")
     if section == "etymologies":
-	    print("=== Etymologies ===\n")
-        wordwrap(response[0])
+	print("=== Etymologies ===\n")
+        for ety in response:
+            wordwrap(ety, length)
+            print("")
     if section == "reverseDictionary":
         print(response)
     if section == "randomWord":
@@ -161,7 +163,7 @@ def displayInfo(section, response, length):
             print("")
     if section == "scrabbleScore":
         print("=== Scrabble Score ===\n")
-        wordwrap(str(response["value"]))
+        wordwrap(str(response["value"]), length)
         print("")
 
 
