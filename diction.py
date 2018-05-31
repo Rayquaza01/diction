@@ -21,21 +21,23 @@ def parseArgs():
     relatedTypes = ["synonym", "antonym", "variant", "equivalent", "cross-reference", "related-word", "rhyme", "form", "etymologically-related-term", "hypernym", "hyponym", "inflected-form", "primary", "same-context", "verb-form", "verb-stem"]
     partsOfSpeech = ["noun", "adjective", "verb", "adverb", "interjection", "pronoun", "preposition", "abbreviation", "affix", "article", "auxiliary-verb", "conjunction", "definite-article", "family-name", "given-name", "idiom", "imperative", "noun-plural", "noun-posessive", "past-participle", "phrasal-prefix", "proper-noun", "proper-noun-plural", "proper-noun-posessive", "suffix", "verb-intransitive", "verb-transitive"]
     ap = argparse.ArgumentParser()
-    ap.add_argument("word", nargs="?")
+    ap.add_argument("word", nargs="*")
     ap.add_argument("-c", "--useCannonical", action="store_true")
     ap.add_argument("-l", "--limit", type=int, nargs="?")
     ap.add_argument("-e", "--examples", action="store_true")
+    ap.add_argument("-te", "--topExample", action="store_true")
     ap.add_argument("-d", "--definitions", choices=partsOfSpeech, nargs="*")
     ap.add_argument("-r", "--relatedWords", choices=relatedTypes, nargs="*")
     ap.add_argument("-p", "--pronunciations", action="store_true")
     ap.add_argument("-hy", "--hyphenation", action="store_true")
     ap.add_argument("-f", "--frequency", type=int, nargs=2) # NOT IMPLEMENTED
     ap.add_argument("-ph", "--phrases", action="store_true")
-    ap.add_argument("-et", "--etymologies", action="store_true") # NOT IMPLEMENTED
+    ap.add_argument("-et", "--etymologies", action="store_true")
     ap.add_argument("-a", "--audio", action="store_true") # NOT IMPLEMENTED
     ap.add_argument("-rd", "--reverseDictionary", action="store_true") # NOT IMPLEMENTED
     ap.add_argument("-rw", "--randomWord", action="store_true")
     ap.add_argument("-rws", "--randomWords", action="store_true")
+    ap.add_argument("-s", "--scrabbleScore", action="store_true")
     ap.add_argument("-ww", "--wordwrap", type=int, nargs=1)
     opts = ap.parse_args()
     return vars(opts)
@@ -64,6 +66,8 @@ def getGetString(section, options, arguments):
 def makeRequest(word, section, options, arguments):
     base = "https://api.wordnik.com/v4/"
     endpoint = "word.json"
+    if section == "reverseDictionary":
+        arguments["query"] = word 
     word += "/"
     if section in ["reverseDictionary", "randomWord", "randomWords"]:
         endpoint = "words.json"
@@ -93,7 +97,15 @@ def displayInfo(section, response, length):
             wordwrap(example["title"] + ":", length)
             wordwrap(example["text"], length)
             print(" | ")
-            wordwrap(example["url"] + "\n", length)
+            wordwrap(example["url"], length)
+            print("")
+    if section == "topExample":
+        print("=== Top Example ===\n")
+        wordwrap(response["title"] + ":", length)
+        wordwrap(response["text"], length)
+        print(" | ")
+        wordwrap(response["url"] + "\n", length)
+        print("")
     if section == "definitions":
         print("=== Definitions ===\n")
         definitions = {}
@@ -147,6 +159,10 @@ def displayInfo(section, response, length):
         for word in response:
             wordwrap(word["word"], length)
             print("")
+    if section == "scrabbleScore":
+        print("=== Scrabble Score ===\n")
+        wordwrap(str(response["value"]))
+        print("")
 
 
 def main():
@@ -156,13 +172,14 @@ def main():
     options = loadConfig(cwd + "/diction.ini")
     getParams = list((collections.Counter(filteredArgs.keys()) & collections.Counter(options.sections())).elements())
     length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
-    word = arguments["word"] if arguments["word"] is not None else ""
-    for section in getParams:
-        if section not in ["audio", "frequency"]:
-            response = makeRequest(word, section, options, arguments)
-            displayInfo(section, response, length)
-        else:
-            webbrowser.open("https://rayquaza01.github.io/diction/{0}.html?word={1}&{2}".format(section, word, getGetString(section, options, arguments)))
+    words = arguments["word"] if arguments["word"] is not None else ""
+    for word in words.split(" "):
+        for section in getParams:
+            if section not in ["audio", "frequency"]:
+                response = makeRequest(word, section, options, arguments)
+                displayInfo(section, response, length)
+            else:
+                webbrowser.open("https://rayquaza01.github.io/diction/{0}.html?word={1}&{2}".format(section, word, getGetString(section, options, arguments)))
 
 
 if __name__ == "__main__":
