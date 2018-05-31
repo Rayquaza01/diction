@@ -7,11 +7,12 @@ function displayInfo(section, response) {
     case "audio":
         for (var audio of response) {
             var quote = document.createElement("blockquote");
-            var media = document.createElement("audio");
+            var media = document.createElement("video");
+            media.controls = "";
             media.src = audio.fileUrl;
             quote.append(media);
             var attribute = document.createElement("span");
-            attribute.innerText = response.attributionText;
+            attribute.innerText = audio.attributionText;
             quote.append(attribute);
             box.append(quote);
         }
