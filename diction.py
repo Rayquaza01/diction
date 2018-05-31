@@ -186,7 +186,7 @@ def main():
                 response = makeRequest(word, section, options, arguments)
                 displayInfo(section, response, length)
             else:
-                webbrowser.open("https://rayquaza01.github.io/diction/{0}.html?word={1}&{2}".format(section, word, getGetString(section, options, arguments)))
+                webbrowser.open("https://rayquaza01.github.io/diction/index.html?word={0}&section={1}&{2}".format(word, section, getGetString(section, options, arguments)))
 
 
 if __name__ == "__main__":
