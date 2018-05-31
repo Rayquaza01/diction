@@ -7,6 +7,7 @@ import os
 import collections
 import sys
 import webbrowser
+import re
 
 
 def loadConfig(file):
@@ -73,6 +74,7 @@ def makeRequest(word, section, options, arguments):
 
 
 def wordwrap(line, length):
+    line = re.sub("<[^>]*>", "", line)
     if len(line) < length:
         print(" | " + line)
     else:
@@ -113,7 +115,8 @@ def displayInfo(section, response, length):
         print("=== Related Words ===\n")
         for relation in response:
             print(" | " + relation["relationshipType"] + ":")
-            wordwrap(", ".join(relation["words"]) + "\n", length)
+            wordwrap(", ".join(relation["words"]), length)
+            print("")
     if section == "pronunciations":
         print("=== Pronunciations ===\n")
         for phonic in response:
@@ -123,20 +126,27 @@ def displayInfo(section, response, length):
         final = []
         for hyphen in response:
             final.append(hyphen["text"])
-        wordwrap("-".join(final) + "\n", length)
+        wordwrap("-".join(final), length)
+        print("")
     if section == "phrases":
         print("=== Phrases ===\n")
         for phrase in response:
-            wordwrap(phrase["gram1"] + " " + phrase["gram2"] + "\n", length)
+            wordwrap(phrase["gram1"] + " " + phrase["gram2"], length)
+            print("")
+    if section == "etymologies":
+	    print("=== Etymologies ===\n")
+        wordwrap(response[0])
     if section == "reverseDictionary":
         print(response)
     if section == "randomWord":
         print("=== Random Word ===\n")
-        wordwrap(response["word"] + "\n", length)
+        wordwrap(response["word"], length)
+        print("")
     if section == "randomWords":
         print("=== Random Words ===\n")
         for word in response:
-            wordwrap(word["word"] + "\n", length)
+            wordwrap(word["word"], length)
+            print("")
 
 
 def main():
@@ -148,7 +158,7 @@ def main():
     length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
     word = arguments["word"] if arguments["word"] is not None else ""
     for section in getParams:
-        if section not in ["audio", "etymologies", "frequency"]:
+        if section not in ["audio", "frequency"]:
             response = makeRequest(word, section, options, arguments)
             displayInfo(section, response, length)
         else:
