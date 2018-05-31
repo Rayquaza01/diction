@@ -19,10 +19,10 @@ function main() {
         var split = pair.split("=");
         if (split[0] === "word") {
             // wordEle.innerText = split[1];
-            var temp["word"] = split[1];
+            temp["word"] = split[1];
         } else if (split[0] == "section") {
             // sectionEle.innerText = split[1];
-            var temp["section"] = split[1];
+            temp["section"] = split[1];
         } else {
             getList.push(pair);
         }
