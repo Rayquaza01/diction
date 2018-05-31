@@ -6,6 +6,7 @@ import json
 import os
 import collections
 import sys
+import webbrowser
 
 
 def loadConfig(file):
@@ -39,30 +40,34 @@ def parseArgs():
     return vars(opts)
 
 
-def makeRequest(word, section, options, params):
+def getGetString(section, options, arguments):
+    sectionParams = options.items(section)
+    getParams = {k: v for k, v in sectionParams if v != ""}
+    if arguments["limit"] is not None:
+        getParams["limit"] = str(arguments["limit"])
+    if arguments["useCannonical"]:
+        getParams["useCannonical"] = "true" if getParams["useCannonical"] == "false" else "false"
+    if section == "relatedWords":
+        if arguments["relatedWords"]:
+            getParams["relationshipTypes"] = ",".join(arguments["relatedWords"])
+    if section == "definitions":
+        if arguments["definitions"]:
+            getParams["partOfSpeech"] = ",".join(arguments["definitions"])
+    getParams["api_key"] = options["api"]["apikey"]
+    getList = []
+    for k, v in getParams.items():
+        getList.append("=".join([k, v]))
+    return "&".join(getList)
+
+
+def makeRequest(word, section, options, arguments):
     base = "https://api.wordnik.com/v4/"
     endpoint = "word.json"
     word += "/"
     if section in ["reverseDictionary", "randomWord", "randomWords"]:
         endpoint = "words.json"
         word = ""
-    sectionParams = options.items(section)
-    getParams = {k: v for k, v in sectionParams if v != ""}
-    if params["limit"] is not None:
-        getParams["limit"] = str(params["limit"])
-    if params["useCannonical"]:
-        getParams["useCannonical"] = "true" if getParams["useCannonical"] == "false" else "false"
-    if section == "relatedWords":
-        if params["relatedWords"]:
-            getParams["relationshipTypes"] = ",".join(params["relatedWords"])
-    if section == "definitions":
-        if params["definitions"]:
-            getParams["partOfSpeech"] = ",".join(params["definitions"])
-    getParams["api_key"] = options["api"]["apikey"]
-    getList = []
-    for k, v in getParams.items():
-        getList.append("=".join([k, v]))
-    getString = "&".join(getList)
+    getString = getGetString(section, options, arguments)
     url = "{0}{1}/{2}{3}?{4}".format(base, endpoint, word, section, getString)
     return json.loads(urllib.request.urlopen(url).read().decode("utf-8"))
 
@@ -143,8 +148,11 @@ def main():
     length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
     word = arguments["word"] if arguments["word"] is not None else ""
     for section in getParams:
-        response = makeRequest(word, section, options, arguments)
-        displayInfo(section, response, length)
+        if section not in ["audio", "etymologies", "frequency"]:
+            response = makeRequest(word, section, options, arguments)
+            displayInfo(section, response, length)
+        else:
+            webbrowser.open("https://rayquaza01.github.io/diction/{0}.html?word={1}&{2}".format(section, word, getGetString(section, options, arguments)))
 
 
 if __name__ == "__main__":
