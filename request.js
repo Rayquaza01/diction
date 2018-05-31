@@ -8,7 +8,7 @@ function displayInfo(section, response) {
         for (var audio of response) {
             var quote = document.createElement("blockquote");
             var media = document.createElement("video");
-            media.controls = "";
+            media.setAttribute("controls", "");
             media.src = audio.fileUrl;
             quote.append(media);
             var attribute = document.createElement("span");
