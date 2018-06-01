@@ -35,7 +35,7 @@ def parseArgs():
     ap.add_argument("-ph", "--phrases", action="store_true")
     ap.add_argument("-et", "--etymologies", action="store_true")
     ap.add_argument("-a", "--audio", action="store_true")
-    ap.add_argument("-rd", "--reverseDictionary", action="store_true") # NOT IMPLEMENTED
+    ap.add_argument("-rd", "--reverseDictionary", action="store_true")
     ap.add_argument("-rw", "--randomWord", action="store_true")
     ap.add_argument("-rws", "--randomWords", action="store_true")
     ap.add_argument("-s", "--scrabbleScore", action="store_true")
@@ -165,13 +165,21 @@ def displayInfo(section, response, length):
             sd = item["sourceDictionary"]
             if word not in wordList:
                 wordList[word] = {}
-            if sd not in wordList[word]["definitions"]:
+            if sd not in wordList[word]:
                 wordList[word][sd] = {}
-                wordList[word][sd]["attribution"] = define["attributionText"]
+                wordList[word][sd]["attribution"] = item["attributionText"]
                 wordList[word][sd]["list"] = []
             wordList[word][sd]["list"].append([item["partOfSpeech"] if "partOfSpeech" in item else "", item["text"] if "text" in item else item["extendedText"] if "extendedText" in item else ""])
         for word in wordList:
-            # print here
+            wordwrap("=== " + word + " ===", length)
+            print("")
+            for dictionary in wordList[word]:
+                for entry in wordList[word][dictionary]["list"]:
+                    index = str(wordList[word][dictionary]["list"].index(entry) + 1) + ". "
+                    partOfSpeech = entry[0] + ". " if entry[0] != "" else ""
+                    definition = entry[1]
+                    wordwrap(index + partOfSpeech + definition, length)
+                print(" | \n | " + wordList[word][dictionary]["attribution"] + "\n")
     if section == "randomWord":
         print("=== Random Word ===\n")
         wordwrap(response["word"], length)
