@@ -31,7 +31,8 @@ function displayInfo(section, response) {
                 labels: labels,
                 datasets: [{
                     label: "Frequency",
-                    data: count
+                    data: count,
+                    backgroundColor: "#EF4D23"
                 }]
             }
         });
