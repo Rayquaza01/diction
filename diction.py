@@ -31,10 +31,10 @@ def parseArgs():
     ap.add_argument("-r", "--relatedWords", choices=relatedTypes, nargs="*")
     ap.add_argument("-p", "--pronunciations", action="store_true")
     ap.add_argument("-hy", "--hyphenation", action="store_true")
-    ap.add_argument("-f", "--frequency", type=int, nargs=2) # NOT IMPLEMENTED
+    ap.add_argument("-f", "--frequency", type=int, nargs=2)
     ap.add_argument("-ph", "--phrases", action="store_true")
     ap.add_argument("-et", "--etymologies", action="store_true")
-    ap.add_argument("-a", "--audio", action="store_true") # NOT IMPLEMENTED
+    ap.add_argument("-a", "--audio", action="store_true")
     ap.add_argument("-rd", "--reverseDictionary", action="store_true") # NOT IMPLEMENTED
     ap.add_argument("-rw", "--randomWord", action="store_true")
     ap.add_argument("-rws", "--randomWords", action="store_true")
@@ -158,7 +158,20 @@ def displayInfo(section, response, length):
             wordwrap(ety, length)
             print("")
     if section == "reverseDictionary":
-        print(response)
+        print("=== Reverse Dictionary ===\n")
+        wordList = {}
+        for item in response["results"]:
+            word = item["word"]
+            sd = item["sourceDictionary"]
+            if word not in wordList:
+                wordList[word] = {}
+            if sd not in wordList[word]["definitions"]:
+                wordList[word][sd] = {}
+                wordList[word][sd]["attribution"] = define["attributionText"]
+                wordList[word][sd]["list"] = []
+            wordList[word][sd]["list"].append([item["partOfSpeech"] if "partOfSpeech" in item else "", item["text"] if "text" in item else item["extendedText"] if "extendedText" in item else ""])
+        for word in wordList:
+            # print here
     if section == "randomWord":
         print("=== Random Word ===\n")
         wordwrap(response["word"], length)
