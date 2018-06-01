@@ -16,6 +16,25 @@ function displayInfo(section, response) {
             quote.append(attribute);
             box.append(quote);
         }
+    case "frequency":
+        var ctx = document.createElement("canvas");
+        box.append(ctx)
+        var count = [];
+        var labels = [];
+        for (frequent of response["frequency"]) {
+            count.push(frequent["count"]);
+            labels.push(frequent["year"]);
+        }
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Frequency",
+                    data: count
+                }]
+            }
+        });
     }
 }
 
