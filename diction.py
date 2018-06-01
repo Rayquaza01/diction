@@ -57,6 +57,8 @@ def getGetString(section, options, arguments):
     if section == "definitions":
         if arguments["definitions"]:
             getParams["partOfSpeech"] = ",".join(arguments["definitions"])
+    if section == "reverseDictionary":
+        getParams["query"] = arguments["query"]
     getParams["api_key"] = options["api"]["apikey"]
     getList = []
     for k, v in getParams.items():
@@ -119,7 +121,7 @@ def displayInfo(section, response, length):
                 definitions[sd] = {}
                 definitions[sd]["attribution"] = define["attributionText"]
                 definitions[sd]["list"] = []
-            definitions[sd]["list"].append([define["partOfSpeech"] if "partOfSpeech" in define else "", define["text"] if "text" in define else define["extendedText"]])
+            definitions[sd]["list"].append([define["partOfSpeech"] if "partOfSpeech" in define else "", define["text"] if "text" in define else define["extendedText"] if "extendedText" in define else ""])
         for dictionary in definitions:
             for entry in definitions[dictionary]["list"]:
                 index = str(definitions[dictionary]["list"].index(entry) + 1) + ". "
