@@ -88,9 +88,9 @@ def wordwrap(line, length):
     else:
         while len(line) > length:
             line = " | " + line
-            space = re.search("(?s:.*)[ ?&/+#=]", line[0:length]).span()[1]
+            space = line[0:length].rfind(re.findall("[ ?&/+#=]", line[0:length])[-1])
             print(line[0:space])
-            line = line[space:]
+            line = line[space+1:]
         print(" | " + line)
 
 
