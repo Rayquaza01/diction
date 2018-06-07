@@ -25,6 +25,7 @@ def parseArgs():
     ap.add_argument("word", nargs="*")
     ap.add_argument("-c", "--useCannonical", action="store_true")
     ap.add_argument("-l", "--limit", type=int, nargs="?")
+    ap.add_argument("-ww", "--wordwrap", type=int, nargs=1)
     ap.add_argument("-e", "--examples", action="store_true")
     ap.add_argument("-te", "--topExample", action="store_true")
     ap.add_argument("-d", "--definitions", choices=partsOfSpeech, nargs="*")
@@ -39,7 +40,6 @@ def parseArgs():
     ap.add_argument("-rw", "--randomWord", action="store_true")
     ap.add_argument("-rws", "--randomWords", action="store_true")
     ap.add_argument("-s", "--scrabbleScore", action="store_true")
-    ap.add_argument("-ww", "--wordwrap", type=int, nargs=1)
     opts = ap.parse_args()
     return vars(opts)
 
@@ -83,7 +83,7 @@ def makeRequest(word, section, options, arguments):
 def wordwrap(line, length):
     line = re.sub("<[^>]*>", "", line)
     line = line.replace("\n", "")
-    if len(line) < length:
+    if len(line) < length or length == -1:
         print(" | " + line)
     else:
         while len(line) > length:
