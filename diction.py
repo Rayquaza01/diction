@@ -32,7 +32,7 @@ def parseArgs():
     ap.add_argument("-r", "--relatedWords", choices=relatedTypes, nargs="*")
     ap.add_argument("-p", "--pronunciations", action="store_true")
     ap.add_argument("-hy", "--hyphenation", action="store_true")
-    ap.add_argument("-f", "--frequency", type=int, nargs=2)
+    ap.add_argument("-f", "--frequency", type=int, nargs="*")
     ap.add_argument("-ph", "--phrases", action="store_true")
     ap.add_argument("-et", "--etymologies", action="store_true")
     ap.add_argument("-a", "--audio", action="store_true")
@@ -59,10 +59,13 @@ def getGetString(section, options, arguments):
             getParams["partOfSpeech"] = ",".join(arguments["definitions"])
     if section == "reverseDictionary":
         getParams["query"] = arguments["query"]
+    if section == "frequency":
+        getParams["startYear"] = arguments["frequency"][0] if 0 in range(len(arguments["frequency"])) else getParams["startYear"]
+        getParams["endYear"] = arguments["frequency"][1] if 1 in range(len(arguments["frequency"])) else getParams["endYear"]
     getParams["api_key"] = options["api"]["apikey"]
     getList = []
     for k, v in getParams.items():
-        getList.append("=".join([k, v]))
+        getList.append("=".join([k, str(v)]))
     return "&".join(getList)
 
 
