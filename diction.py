@@ -23,7 +23,7 @@ def parseArgs():
     partsOfSpeech = ["noun", "adjective", "verb", "adverb", "interjection", "pronoun", "preposition", "abbreviation", "affix", "article", "auxiliary-verb", "conjunction", "definite-article", "family-name", "given-name", "idiom", "imperative", "noun-plural", "noun-posessive", "past-participle", "phrasal-prefix", "proper-noun", "proper-noun-plural", "proper-noun-posessive", "suffix", "verb-intransitive", "verb-transitive"]
     ap = argparse.ArgumentParser()
     ap.add_argument("word", nargs="*")
-    ap.add_argument("-c", "--useCannonical", action="store_true")
+    ap.add_argument("-c", "--useCanonical", action="store_true")
     ap.add_argument("-l", "--limit", type=int, nargs="?")
     ap.add_argument("-ww", "--wordwrap", type=int, nargs=1)
     ap.add_argument("-e", "--examples", action="store_true")
@@ -49,8 +49,8 @@ def getGetString(section, options, arguments):
     getParams = {k: v for k, v in sectionParams if v != ""}
     if arguments["limit"] is not None:
         getParams["limit"] = str(arguments["limit"])
-    if arguments["useCannonical"]:
-        getParams["useCannonical"] = "true" if getParams["useCannonical"] == "false" else "false"
+    if arguments["useCanonical"]:
+        getParams["useCanonical"] = "true" if getParams["useCanonical"] == "false" else "false"
     if section == "relatedWords":
         if arguments["relatedWords"]:
             getParams["relationshipTypes"] = ",".join(arguments["relatedWords"])
