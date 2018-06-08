@@ -4,39 +4,39 @@ const box = document.getElementById("box");
 
 function displayInfo(section, response) {
     switch (section) {
-    case "audio":
-        for (var audio of response) {
-            var quote = document.createElement("blockquote");
-            var media = document.createElement("video");
-            media.setAttribute("controls", "");
-            media.src = audio.fileUrl;
-            quote.append(media);
-            var attribute = document.createElement("span");
-            attribute.innerText = audio.attributionText;
-            quote.append(attribute);
-            box.append(quote);
-        }
-    case "frequency":
-        var ctx = document.createElement("canvas");
-        box.append(ctx)
-        var count = [];
-        var labels = [];
-        for (frequent of response["frequency"]) {
-            count.push(frequent["count"]);
-            labels.push(frequent["year"]);
-        }
-        new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: "Frequency",
-                    data: count,
-                    backgroundColor: "#EF4D23"
-                }]
+        case "audio":
+            for (var audio of response) {
+                var quote = document.createElement("blockquote");
+                var media = document.createElement("video");
+                media.setAttribute("controls", "");
+                media.src = audio.fileUrl;
+                quote.append(media);
+                var attribute = document.createElement("span");
+                attribute.innerText = audio.attributionText;
+                quote.append(attribute);
+                box.append(quote);
             }
-        });
-    }
+        case "frequency":
+            var ctx = document.createElement("canvas");
+            box.append(ctx)
+            var count = [];
+            var labels = [];
+            for (frequent of response["frequency"]) {
+                count.push(frequent["count"]);
+                labels.push(frequent["year"]);
+            }
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Frequency",
+                        data: count,
+                        backgroundColor: "#EF4D23"
+                    }]
+                }
+            });
+       }
 }
 
 async function request(word, section, getString) {
