@@ -56,7 +56,7 @@ Used as `-p` or `--pronunciations`
 Whether to return hyphenation of the word.  
 Used as `-hy` or `--hyphenation`
 ### frequency
-Whether to open a webpage with a graph of the word's frequency. Takes a start year and an end year as arguments, or defaults to the years specified in the config.  [Chart.js](https://chartjs.org) is used to make the graph.  
+Whether to open a webpage with a graph of the word's frequency. Takes a start year and an end year as arguments, or defaults to the years specified in the config.  [Chart.js](https://www.chartjs.org) is used to make the graph.  
 Used as `-f` or `--frequency`  
 Ex: `diction.py -f 1800 2012 ...`
 ### phrases
@@ -80,3 +80,7 @@ Used as `-rws` or `--randomWords`
 ### scrabbleScore
 Whether to return the word's scrabble score.  
 Used as `-s` or `--scrabbleScore`
+# Acknowledgements
+Built using Python 3  
+Uses [Chart.js](https://www.chartjs.org) for frequency graph (MIT)  
+[![Powered by Wordnik](https://www.wordnik.com/img/wordnik_badge_a1.png)](https://wordnik.com)

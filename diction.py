@@ -208,13 +208,14 @@ def main():
     length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
     words = arguments["word"] if arguments["word"] is not None else [""]
     for word in words:
-        print("=== " + word + " ===")
+        print("=== {0} | https://www.wordnik.com/words/{1} ===".format(word, word))
         for section in getParams:
             if section not in ["audio", "frequency"]:
                 response = makeRequest(word, section, options, arguments)
                 displayInfo(section, response, length)
             else:
                 webbrowser.open("https://rayquaza01.github.io/diction/index.html?word={0}&section={1}&{2}".format(word, section, getGetString(section, options, arguments)))
+    print("=== Powered by Wordnik | https://wordnik.com ===")
 
 
 if __name__ == "__main__":
