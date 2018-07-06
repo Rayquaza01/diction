@@ -174,7 +174,7 @@ def displayInfo(section, response, length):
                 wordList[word][sd]["list"] = []
             wordList[word][sd]["list"].append([item["partOfSpeech"] if "partOfSpeech" in item else "", item["text"] if "text" in item else item["extendedText"] if "extendedText" in item else ""])
         for word in wordList:
-            wordwrap("=== " + word + " ===", length)
+            wordwrap("=== {0} | https://www.wordnik.com/words/{0} ===".format(word), length)
             print("")
             for dictionary in wordList[word]:
                 for entry in wordList[word][dictionary]["list"]:
@@ -208,7 +208,7 @@ def main():
     length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
     words = arguments["word"] if arguments["word"] is not None else [""]
     for word in words:
-        print("=== {0} | https://www.wordnik.com/words/{1} ===".format(word, word))
+        print("=== {0} | https://www.wordnik.com/words/{0} ===".format(word))
         for section in getParams:
             if section not in ["audio", "frequency"]:
                 response = makeRequest(word, section, options, arguments)
