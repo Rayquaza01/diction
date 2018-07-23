@@ -39,6 +39,7 @@ function displayInfo(section, response) {
             }
         });
         break;
+    }
 }
 
 async function request(word, section, getString) {
