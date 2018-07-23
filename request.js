@@ -37,9 +37,7 @@ function displayInfo(section, response) {
                     backgroundColor: "#EF4D23"
                 }]
             }
-        });
-        break;
-    }
+        }
 }
 
 async function request(word, section, getString) {
