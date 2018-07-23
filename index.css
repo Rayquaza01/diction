@@ -11,3 +11,10 @@ blockquote {
     border-left: 1px solid black;
     padding-left: 20px;
 }
+
+img {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}

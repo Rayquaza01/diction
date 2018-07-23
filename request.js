@@ -1,5 +1,6 @@
 const wordEle = document.getElementById("wordEle");
 const sectionEle = document.getElementById("sectionEle");
+const wordLink = document.getElementById("wordLink");
 const box = document.getElementById("box");
 
 function displayInfo(section, response) {
@@ -16,6 +17,7 @@ function displayInfo(section, response) {
             quote.append(attribute);
             box.append(quote);
         }
+        break;
     case "frequency":
         var ctx = document.createElement("canvas");
         box.append(ctx)
@@ -36,6 +38,7 @@ function displayInfo(section, response) {
                 }]
             }
         });
+        break;
     }
 }
 
@@ -44,8 +47,7 @@ async function request(word, section, getString) {
     var endpoint = "word.json";
     var url = `${base}${endpoint}/${word}/${section}?${getString}`;
     var response = await fetch(url);
-    var responseText = await response.text();
-    var responseJSON = JSON.parse(responseText);
+    var responseJSON = JSON.parse(await response.text());
     displayInfo(section, responseJSON);
 }
 
@@ -56,6 +58,8 @@ function main() {
         var split = pair.split("=");
         if (split[0] === "word") {
             wordEle.innerText = split[1];
+            wordLink.href = "https://www.wordnik.com/words/" + split[1];
+            wordLink.innerText = "https://www.wordnik.com/words/" + split[1];
             temp["word"] = split[1];
         } else if (split[0] === "section") {
             sectionEle.innerText = split[1];
