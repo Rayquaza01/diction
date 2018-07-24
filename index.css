@@ -1,3 +1,9 @@
+body {
+    background-color: #EEEEEE;
+    color: #444444;
+    font-family: sans-serif;
+}
+
 h1, h2, video {
     text-align: center;
     width: 100%;
@@ -15,10 +21,17 @@ blockquote {
 img {
     position: fixed;
     bottom: 0;
-    left: 0;
+    right: 0;
     z-index: 1;
+    transition: .5s;
+    opacity: .5;
+}
+
+img:hover {
+    transition: .5s;
+    opacity: 1;
 }
 
 a {
-    text-align: center;
+    color: #444444;
 }

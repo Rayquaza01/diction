@@ -1,6 +1,5 @@
 const wordEle = document.getElementById("wordEle");
 const sectionEle = document.getElementById("sectionEle");
-const wordLink = document.getElementById("wordLink");
 const box = document.getElementById("box");
 
 function displayInfo(section, response) {
@@ -58,8 +57,7 @@ function main() {
         var split = pair.split("=");
         if (split[0] === "word") {
             wordEle.innerText = split[1];
-            wordLink.href = "https://www.wordnik.com/words/" + split[1];
-            wordLink.innerText = "https://www.wordnik.com/words/" + split[1];
+            wordEle.href = "https://www.wordnik.com/words/" + split[1];
             temp["word"] = split[1];
         } else if (split[0] === "section") {
             sectionEle.innerText = split[1];
