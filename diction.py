@@ -214,7 +214,7 @@ def main():
                 response = makeRequest(word, section, options, arguments)
                 displayInfo(section, response, length)
             else:
-                webbrowser.open("https://rayquaza01.github.io/diction/index.html?word={0}&section={1}&{2}".format(word, section, getGetString(section, options, arguments)))
+                webbrowser.open("https://rayquaza01.github.io/diction/?word={0}&section={1}&{2}".format(word, section, getGetString(section, options, arguments)))
     print("=== Powered by Wordnik | https://wordnik.com ===")
 
 
