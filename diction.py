@@ -9,6 +9,7 @@ import sys
 import webbrowser
 import re
 import codecs
+import textwrap
 
 
 def loadConfig(file):
@@ -84,16 +85,8 @@ def makeRequest(word, section, options, arguments):
 
 
 def wordwrap(line, length):
-    line = re.sub("<[^>]*>", "", line)
-    line = line.replace("\n", "")
-    if len(line) < length or length == -1:
-        print(" | " + line)
-    else:
-        while len(line) > length:
-            line = " | " + line
-            space = line[0:length].rfind(re.findall("[ ?&/+#=]", line[0:length])[-1])
-            print(line[0:space])
-            line = line[space+1:]
+    lines = textwrap.wrap(line, width=length - 3)
+    for line in lines:
         print(" | " + line)
 
 
