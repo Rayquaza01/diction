@@ -2,12 +2,12 @@
 import configparser
 import argparse
 import urllib.request
+import urllib.parse
 import json
 import os
 import collections
 import sys
 import webbrowser
-import re
 import codecs
 import textwrap
 
@@ -64,10 +64,7 @@ def getGetString(section, options, arguments):
         getParams["startYear"] = arguments["frequency"][0] if 0 in range(len(arguments["frequency"])) else getParams["startYear"]
         getParams["endYear"] = arguments["frequency"][1] if 1 in range(len(arguments["frequency"])) else getParams["endYear"]
     getParams["api_key"] = options["api"]["apikey"]
-    getList = []
-    for k, v in getParams.items():
-        getList.append("=".join([k, str(v)]))
-    return "&".join(getList)
+    return urllib.parse.urlencode(getParams)
 
 
 def makeRequest(word, section, options, arguments):
