@@ -77,7 +77,7 @@ def makeRequest(word, section, options, arguments):
         endpoint = "words.json"
         word = ""
     getString = getGetString(section, options, arguments)
-    url = "{0}{1}/{2}{3}?{4}".format(base, endpoint, word, section, getString)
+    url = f"{base}{endpoint}/{word}{section}?{getString}"
     return json.loads(urllib.request.urlopen(url).read().decode("utf-8"))
 
 
@@ -164,7 +164,8 @@ def displayInfo(section, response, length):
                 wordList[word][sd]["list"] = []
             wordList[word][sd]["list"].append([item["partOfSpeech"] if "partOfSpeech" in item else "", item["text"] if "text" in item else item["extendedText"] if "extendedText" in item else ""])
         for word in wordList:
-            wordwrap("=== {0} | https://www.wordnik.com/words/{0} ===".format(word), length)
+            word_encoded = urllib.parse.quote(word)
+            wordwrap(f"=== {word} | https://www.wordnik.com/words/{word_encoded} ===", length)
             print("")
             for dictionary in wordList[word]:
                 for entry in wordList[word][dictionary]["list"]:
@@ -198,13 +199,14 @@ def main():
     length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
     words = arguments["word"] if arguments["word"] is not None else [""]
     for word in words:
-        print("=== {0} | https://www.wordnik.com/words/{0} ===".format(word))
+        word_encoded = urllib.parse.quote(word)
+        print(f"=== {word} | https://www.wordnik.com/words/{word_encoded} ===")
         for section in getParams:
             if section not in ["audio", "frequency"]:
-                response = makeRequest(word, section, options, arguments)
+                response = makeRequest(word_encoded, section, options, arguments)
                 displayInfo(section, response, length)
             else:
-                webbrowser.open("https://rayquaza01.github.io/diction/?word={0}&section={1}&{2}".format(word, section, getGetString(section, options, arguments)))
+                webbrowser.open(f"https://rayquaza01.github.io/diction/?word={word_encoded}&section={section}&{getGetString(section, options, arguments)}")
     print("=== Powered by Wordnik | https://wordnik.com ===")
 
 
