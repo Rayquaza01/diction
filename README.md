@@ -7,11 +7,9 @@ Diction is a python script that acts as a wrapper for Wordnik's [API](https://de
 Best when piped into `less`, because outputs can be pretty long
 
 ## Getting Started
- * Download `diction.py` and `diction.ini` and put them somewhere on your computer
-   * A zip of the current version is available [here](https://github.com/Rayquaza01/diction/archive/master.zip), or you could run `git clone https://github.com/Rayquaza01/diction` if that's more your style.
- * You may want to add the folder they're in to your [path](https://en.wikipedia.org/wiki/PATH_(variable)) so you can run it from anywhere
-   * On windows, you can run `[Environment]::SetEnvironmentVariable( "Path", $env:Path + ";" + (Get-Location).path, [System.EnvironmentVariableTarget]::Machine )` in an Administrator PowerShell to add the current folder to the path.
- * Add your API key to `diction.ini` under the `[api]` header. (You can get an API key at https://developer.wordnik.com)
+ * Run `pip3 install git+https://github.com/Rayquaza01/diction` or `pip3 install diction`
+ * Run `diction.py` to download a sample config file to `~/diction.ini`
+ * Add your API key to the config file
 
 ## Arguments
 Multiple arguments can be sent at a time. `diction.py word example -d -r` returns definitions and related words for both "word" and "example".
