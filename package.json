@@ -1,0 +1,21 @@
+{
+    "name": "diction",
+    "version": "1.0.1",
+    "description": "A wordnik commandline client",
+    "main": "bin/diction.py",
+    "scripts": {
+        "build": "python3 setup.py sdist bdist_wheel",
+        "upload:test": "twine upload --repository-url https://test.pypi.org/legacy/ dist/*",
+        "upload": "twine upload dist/*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Rayquaza01/diction.git"
+    },
+    "author": "Rayquaza01",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Rayquaza01/diction/issues"
+    },
+    "homepage": "https://github.com/Rayquaza01/diction#readme"
+}

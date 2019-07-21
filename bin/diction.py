@@ -191,10 +191,14 @@ def displayInfo(section, response, length):
 
 def main():
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
-    cwd = os.path.dirname(os.path.abspath(sys.argv[0]))
     arguments = parseArgs()
     filteredArgs = {k: v for k, v in arguments.items() if v is not None and v is not False}
-    options = loadConfig(cwd + "/diction.ini")
+    cfgPath = os.path.expanduser("~/diction.ini")
+    if not os.path.isfile(os.path.expanduser(cfgPath)):
+        urllib.request.urlretrieve("https://raw.githubusercontent.com/Rayquaza01/diction/master/diction.ini", cfgPath)
+        print("Downloaded config to ~/diction.ini. Please add your API key!")
+        exit()
+    options = loadConfig(os.path.expanduser(cfgPath))
     getParams = list((collections.Counter(filteredArgs.keys()) & collections.Counter(options.sections())).elements())
     length = arguments["wordwrap"][0] if arguments["wordwrap"] is not None else int(options["api"]["wordwrap"])
     words = arguments["word"] if arguments["word"] is not None else [""]
