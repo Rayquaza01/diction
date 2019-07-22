@@ -116,7 +116,8 @@ def displayInfo(section, response, length):
                 definitions[sd]["list"] = []
             definitions[sd]["list"].append([define["partOfSpeech"] if "partOfSpeech" in define else "", define["text"] if "text" in define else define["extendedText"] if "extendedText" in define else ""])
         for dictionary in definitions:
-            for entry in definitions[dictionary]["list"]:
+            filtered = [x for x in definitions[dictionary]["list"] if x[1] != ""]
+            for entry in filtered:
                 index = str(definitions[dictionary]["list"].index(entry) + 1) + ". "
                 partOfSpeech = entry[0] + ". " if entry[0] != "" else ""
                 definition = entry[1]
