@@ -2,6 +2,7 @@
 A wordnik commandline client
 
 ![Example](https://i.imgur.com/1tx0CbB.gif)
+[Newer demo](https://youtu.be/M2ijjshGiXc)
 
 Diction is a python script that acts as a wrapper for Wordnik's [API](https://developer.wordnik.com)  
 Best when piped into `less`, because outputs can be pretty long
