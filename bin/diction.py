@@ -8,6 +8,7 @@ import os
 import sys
 import webbrowser
 import textwrap
+import re
 # fix output on windows
 if sys.platform == "win32":
     import codecs
@@ -131,6 +132,7 @@ def displayInfo(section, response, length):
             else:
                 text = define["text"]
 
+            text = re.sub("<[^<]+?>", "", text)
 
             sd = define["sourceDictionary"]
             # put attribution text with dictionaries
